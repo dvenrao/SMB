@@ -1,0 +1,10 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+openfile cifsrfc.txt 2 128
+read $fd0
+closefile $fd0
+tree_disconnect
+logoff

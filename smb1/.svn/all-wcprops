@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repo/asn/!svn/ver/4595/trunk/test/proxy/smb/unit_test_client
+END
+pysmbclient.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repo/asn/!svn/ver/2277/trunk/test/proxy/smb/unit_test_client/pysmbclient.py
+END
+smbsetup.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repo/asn/!svn/ver/4286/trunk/test/proxy/smb/unit_test_client/smbsetup.cfg
+END
+ntlm.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repo/asn/!svn/ver/4595/trunk/test/proxy/smb/unit_test_client/ntlm.py
+END
+testparser.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testparser.py
+END
+smb_dos_err.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repo/asn/!svn/ver/1743/trunk/test/proxy/smb/unit_test_client/smb_dos_err.py
+END
+smbconstants.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repo/asn/!svn/ver/4595/trunk/test/proxy/smb/unit_test_client/smbconstants.py
+END
+smb_logger.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repo/asn/!svn/ver/1087/trunk/test/proxy/smb/unit_test_client/smb_logger.py
+END
+structure.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repo/asn/!svn/ver/4595/trunk/test/proxy/smb/unit_test_client/structure.py
+END
+smb.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repo/asn/!svn/ver/4595/trunk/test/proxy/smb/unit_test_client/smb.py
+END
+smb_config_store.py
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/smb_config_store.py
+END
+Readme.txt
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repo/asn/!svn/ver/2999/trunk/test/proxy/smb/unit_test_client/Readme.txt
+END
+nbss.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repo/asn/!svn/ver/4286/trunk/test/proxy/smb/unit_test_client/nbss.py
+END
+smb_nt_err_codes.py
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repo/asn/!svn/ver/1743/trunk/test/proxy/smb/unit_test_client/smb_nt_err_codes.py
+END

@@ -1,0 +1,14 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+getfsinfo alloc
+getfsinfo vol
+getfsinfo fsvol
+getfsinfo size
+getfsinfo device
+getfsinfo attrinfo
+#getfsinfo fullsize
+tree_disconnect
+logoff

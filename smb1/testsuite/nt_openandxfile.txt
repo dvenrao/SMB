@@ -1,0 +1,10 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect 
+nt_open exist file1 
+nt_read file1 0 12
+closefile file1
+tree_disconnect 
+logoff

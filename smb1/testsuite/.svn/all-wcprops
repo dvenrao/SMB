@@ -1,0 +1,227 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repo/asn/!svn/ver/4595/trunk/test/proxy/smb/unit_test_client/testsuite
+END
+open.txt
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/open.txt
+END
+trans2_findfirst2.txt
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repo/asn/!svn/ver/1717/trunk/test/proxy/smb/unit_test_client/testsuite/trans2_findfirst2.txt
+END
+del_file.txt
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/del_file.txt
+END
+nt_createdir.txt
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/nt_createdir.txt
+END
+move_file.txt
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/move_file.txt
+END
+renamedir.txt
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/renamedir.txt
+END
+renamefile.txt
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/repo/asn/!svn/ver/1717/trunk/test/proxy/smb/unit_test_client/testsuite/renamefile.txt
+END
+copy_file.txt
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repo/asn/!svn/ver/1717/trunk/test/proxy/smb/unit_test_client/testsuite/copy_file.txt
+END
+readcompletefdno.txt
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repo/asn/!svn/ver/2192/trunk/test/proxy/smb/unit_test_client/testsuite/readcompletefdno.txt
+END
+checkdir.txt
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repo/asn/!svn/ver/1717/trunk/test/proxy/smb/unit_test_client/testsuite/checkdir.txt
+END
+echo.txt
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/repo/asn/!svn/ver/4251/trunk/test/proxy/smb/unit_test_client/testsuite/echo.txt
+END
+trans2_findclose2.txt
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/trans2_findclose2.txt
+END
+open_prefetch.txt
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/repo/asn/!svn/ver/4595/trunk/test/proxy/smb/unit_test_client/testsuite/open_prefetch.txt
+END
+open_prefetch_single.txt
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repo/asn/!svn/ver/4595/trunk/test/proxy/smb/unit_test_client/testsuite/open_prefetch_single.txt
+END
+nt_readfile_fdno.txt
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/nt_readfile_fdno.txt
+END
+writefile.txt
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/writefile.txt
+END
+trans2_create_dir.txt
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repo/asn/!svn/ver/1717/trunk/test/proxy/smb/unit_test_client/testsuite/trans2_create_dir.txt
+END
+create_dir.txt
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/create_dir.txt
+END
+trans2_queryfsinfo.txt
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repo/asn/!svn/ver/1717/trunk/test/proxy/smb/unit_test_client/testsuite/trans2_queryfsinfo.txt
+END
+lockandx.txt
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repo/asn/!svn/ver/1717/trunk/test/proxy/smb/unit_test_client/testsuite/lockandx.txt
+END
+nt_read_prefetch_halt.txt
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/repo/asn/!svn/ver/4299/trunk/test/proxy/smb/unit_test_client/testsuite/nt_read_prefetch_halt.txt
+END
+readcomplete.txt
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/readcomplete.txt
+END
+nt_readcomplete.txt
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/nt_readcomplete.txt
+END
+oplockclient1.txt
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/repo/asn/!svn/ver/2192/trunk/test/proxy/smb/unit_test_client/testsuite/oplockclient1.txt
+END
+login.txt
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/login.txt
+END
+oplockclient2.txt
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/repo/asn/!svn/ver/2192/trunk/test/proxy/smb/unit_test_client/testsuite/oplockclient2.txt
+END
+trans2_queryfileinfo.txt
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repo/asn/!svn/ver/2192/trunk/test/proxy/smb/unit_test_client/testsuite/trans2_queryfileinfo.txt
+END
+trans2_findfirst2_largedir.txt
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/trans2_findfirst2_largedir.txt
+END
+nt_readfile.txt
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/nt_readfile.txt
+END
+nt_openandxfile.txt
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/nt_openandxfile.txt
+END
+nt_readfile_err_access_denied.txt
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/nt_readfile_err_access_denied.txt
+END
+change_dir.txt
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/repo/asn/!svn/ver/1717/trunk/test/proxy/smb/unit_test_client/testsuite/change_dir.txt
+END
+create_delete_dir.txt
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/create_delete_dir.txt
+END
+trans2_querypathinfo.txt
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/trans2_querypathinfo.txt
+END
+trans2_delete_file.txt
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repo/asn/!svn/ver/1894/trunk/test/proxy/smb/unit_test_client/testsuite/trans2_delete_file.txt
+END
+nt_read_prefetch.txt
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repo/asn/!svn/ver/4299/trunk/test/proxy/smb/unit_test_client/testsuite/nt_read_prefetch.txt
+END
+nt_read_prefetch_continue.txt
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/repo/asn/!svn/ver/4595/trunk/test/proxy/smb/unit_test_client/testsuite/nt_read_prefetch_continue.txt
+END

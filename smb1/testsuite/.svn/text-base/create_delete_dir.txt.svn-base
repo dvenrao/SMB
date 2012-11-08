@@ -1,0 +1,10 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+mkdir abc1
+isdir abc1
+rmdir abc1
+tree_disconnect
+logoff

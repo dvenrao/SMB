@@ -1,0 +1,11 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+nt_create cifsrfc.txt oplock=0 accessmask=7 fileattr=128 sharemode=3 disposition=1 createoptions=2112  
+nt_read file1 0 12
+nt_read file1
+closefile file1
+tree_disconnect
+logoff

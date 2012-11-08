@@ -1,0 +1,30 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect 
+nt_create file1 oplock=0 accessmask=7 fileattr=128 sharemode=3 disposition=1 createoptions=2112
+nt_read file1 0 10
+nt_read file1 10 12
+nt_read file1
+
+nt_write file1 12 aklflasdfkasdf;afas;fd;asf asdflasj;f asdfkjsa;d asdlkfj sdjf ;asdjf ;asdfj
+nt_write file1 56 hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello
+
+seekfile file1 0 50
+seekfile file1 1 20
+seekfile file1 2 100
+
+closefile file1
+
+isdir \benchrw9
+openfile file1 2 128
+read file1 0 50
+read file1 50 100
+read file1
+write file1 100 this it from smb_com_write this it from smb_com_write this it from smb_com_write this it from smb_com_write this it from smb_com_write this it from smb_com_write
+
+closefile file1
+
+tree_disconnect 
+logoff

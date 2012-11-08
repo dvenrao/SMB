@@ -1,0 +1,13 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+findfirst2 \abc\* bothfiledirinfo
+findfirst2 \abc\* filedirinfo
+findfirst2 \abc\* fulldirinfo
+findfirst2 \abc\* filenamesinfo
+findfirst2 \abc\* fileiddirinfo
+findfirst2 \abc\* bothfileiddirinfo
+tree_disconnect
+logoff

@@ -1,0 +1,33 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+
+getpathinfo test1.txt stdinfo
+#Malformed packet sent by server
+#getpathinfo test1.txt easize
+#Works need to add the file to EA list
+#getpathinfo test1.txt ealist   
+#getpathinfo test1.txt alleas
+#Unknown info level reported from server
+#getpathinfo test1.txt isnamevalid
+
+getpathinfo test1.txt filebasicinfo
+getpathinfo test1.txt filestdinfo
+getpathinfo test1.txt fileeainfo
+getpathinfo test1.txt fninfo
+
+#Unknown info level
+#getpathinfo test1.txt fnallocinfo
+#getpathinfo test1.txt fneofinfo
+
+getpathinfo test1.txt fnallinfo
+getpathinfo test1.txt fnaltnameinfo
+getpathinfo test1.txt streaminfo
+getpathinfo test1.txt compressinfo
+getpathinfo test1.txt nwopeninfo
+getpathinfo test1.txt fninternalinfo
+
+tree_disconnect 
+logoff

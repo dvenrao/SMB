@@ -1,0 +1,623 @@
+/* Copyright 2009, Aryaka Networks. All rights reserved. */
+
+What is pysmbclient?
+====================
+
+This is a python smbclient that can generate smb/cifs request by reading the commands
+from the testscript.  This client can be used with either with Windows/Samba CIFS server 
+or CIFS proxy.  
+
+Why pysmbclient?
+================
+
+This client helps in reducing the on-wire packets compared to the Windows CIFS client.
+The client capabilities can also be configured.
+
+Features in pysmbclient
+=======================
+
+1) SMB Version 1 is supported
+2) Supports NTLMV1 authentication ( without extended security )
+3) Supports both ports 139 and 445
+4) Generates CIFS/SMB packets used in latest Windows Operating systems 
+   (XP and higher).
+5) All commands can either use absolute path to the filename or fd number. Every   file has a fd number associated with it. The fd number can be found either 
+   by counting the occurance of nt_create/nt_open commands in the test script. 
+   Note: File fd number starts with 0
+
+
+Limitations:
+============
+
+1) File operations are considered to be operated on a single data volume.
+
+
+Packages to install for using pysmbclient 
+=========================================
+
+Following python modules have to be installed for using the pysmbclient.
+
+a) Windows:
+   -------
+   Python 2.6 [ complete installation ]
+   pycrypto-2.0.1.win32-py2.6.exe
+
+
+b) Linux:
+   ------
+   Python 2.6/python 2.4
+   Python unicodedata module
+   Python Crypt module
+
+
+Setup
+=====
+
+Populate smbsetup.cfg with appropriate details before using pysmblcient.
+
+The smbsetup.cfg can be divided into 
+1) Connection settings 
+    a) CIFS server/proxy IP address 
+    b) Port
+    c) User credentials 
+    d) Authentication mode
+
+2) Client Capabilites
+    a) Unicode
+    b) Longname in Request/Response
+    c) 32 bit status code
+    d) Oplock Level 2 supported.
+
+
+Usage
+=====
+
+python pysmbclient [ testscript ] 
+
+testscript is the file that contains the sequence of commands, for which the on-wire 
+packets have to be generated.
+
+Every file operation request can accept errorcode that is expected in the 
+response from the server.  Different ways of using the error code is as follow
+
+
+  1) Errorcode not in request
+    
+     The errorcode, errclass tag is optional in the request.  When these tags
+     are not specified in the request the default values will be 0
+     ErrClass is only valid for DOS error codes.
+
+  2) Dont Care Condition
+     
+     Request which does not care about the errorcode in the response can set
+     errorcode to 0xffffffff, which will not validate the errorcode in the
+     response.
+
+  3) Strict Adherence
+    
+     Request in the test script that have specified the errorcode,errclass
+     with a specific value expect the response from the server to carry the 
+     same errorcode as was in the request, failing so the test fails.
+     
+  Usage:
+
+     Errorcode not in request
+     a) nt_create cifsrfc.txt oplock=0 accessmask=1 fileattr=128 sharemode=0
+                              disposition=1 createoptions=2112
+        The errclass and errorcode is set to 0 when these tags are missing in
+        the request
+
+     Strict Adherence
+     b) nt_create cifsrfc.txt oplock=0 accessmask=2 fileattr=128 sharemode=3
+                              disposition=1 createoptions=2112 
+                              errclass=0 error=0xC0000043
+        The errclass and errorcode is its corresponding values and validated 
+        against the response received from the server
+
+     Dont Care Condition
+     c) nt_create cifsrfc.txt oplock=0 accessmask=2 fileattr=128 sharemode=3
+                              disposition=1 createoptions=2112 
+                              errclass=0 error=0xFFFFFFFF
+        The errorcode if set to 0xFFFFFFFF then the server response error will
+        also be ignored 
+
+
+Testscript Commands
+===================
+The following commands can be used in the testscript, which will generated 
+on-wire SMB/CIFS packets.  A client usage scenario can be generated with these
+commands sequenced correctly. 
+
+'test:'
+    - This tag can be used to specify a name to the test scenario
+
+'description:'
+    - Specify the brief description of the test being performed with multiple 
+      lines be commented with '#'
+
+
+'negotiate' ---  [SMB_NEGOTIATE] 
+    - The first command after the test description to start the client 
+      negotiation.  This commands can be called with either the auth
+      mode as arguments or no argument (populated from the smbsetup.cfg)
+      and initiates a connection with the CIFS server/proxy that contains 
+      the authentication mode supported by the client
+
+      Usage:  negotiate [authentication mode]
+              negotiate SMB_DIALECT_NTLM12
+              negotiate  -  the auth mode is taken from the config file.
+
+
+'session_setup' --- SMB_SESSION_SETUP_ANDX
+    - This command sends SESSION_SETUP_ANDX request and the client capabilities
+      are read from the configuration file (smbsetup.cfg). This command does not
+      require any arguments and should always follow 'negotiate' command.
+
+      Usage:  session_setup
+
+
+'tree_connect' ---  SMB_TREE_CONNECT_ANDX
+    - This command is used to connect to a share on the CIFS server. The share 
+      can be passed as an argument to this command.  Currently the client only 
+      operates on a single data volume. If no argument is specified the default
+      share will be used as in the smbsetup.cfg file.
+
+      Usage: tree_connect (default sharename from smbsetup will be used)
+
+             tree_connect [share-name]
+             tree_connect share1  
+
+
+'tree_disconnect' --- SMB_TREE_DISCONNECT
+    - This command is used to disconnect from the share to which the client has 
+      connected. The share can be passed as an argument to this command. If no
+      argument is specified the default share will be used as in the 
+      smbsetup.cfg file.
+
+      Usage: tree_disconnect (default sharename from smbsetup will be used)
+             tree_disconnect [share-name]
+             (share-name has to be the same provided in tree_connect command)
+             tree_disconnect share1
+
+
+'logoff' --- SMB_LOGOFF
+    - Close the client session. This command is used at the end of complete
+      execution of the testscript and tears down the client session with the 
+      server
+
+      Usage: logoff
+
+
+'echo' --- SMB_ECHO
+    - This command is used to generate SMB_ECHO command. Command takes count 
+      and the echo string
+
+      Usage: echo [count] [echostring]
+             echo 2 hello world
+
+
+'nt_create' --- SMB_NT_CREATE_ANDX
+    - This command opens a existing file or a new file based on the parameters
+      passed to it. The first argument is always the filename.  
+      The arguments are provided with the value as seen in the 
+      SMB_NT_CREATE_ANDX packets.  
+      The following are the list of arguments:
+      a) oplock         [0]
+      b) accessmask     [7]
+      c) fileattr       [128]
+      d) sharemode      [3]
+      e) disposition    [3]
+      f) createoptions  [2112]
+      g) impersonation  [2]
+      h) securityflags  [3]
+ 
+      If not arguments follow the filename then the default values will be used.
+      The default values are mentioned above along side the name of the
+      arguments
+
+      Usage: nt_create <filename> [file open arguments as mentioned above]
+
+       nt_create testfile.txt
+        - Default values will be considered during opening the file.
+          nt_create testfile.txt oplock=6 accessmask=7 fileattr=128 sharemode=0
+          disposition=1 createoptions=2112
+
+        - Request for Opening an existing file with an exclusive oplock and
+          no share access to other clients for any operation on the file
+          nt_create cifsrfc.txt oplock=0 accessmask=1 fileattr=128 sharemode=3
+                    disposition=1 createoptions=2112
+
+          nt_create cifsrfc.txt oplock=0 accessmask=2 fileattr=128 sharemode=3 
+                    disposition=1 createoptions=2112
+
+        - The file opened using the above commands can be access by fd number. 
+          The first cifsrfc.txt will have the fd number ($fd0) and the second 
+          will have the fd number ($fd1).  Any further file open either by 
+          nt_create/nt_open will have subsequent number prefixed by '$fd'
+
+
+'nt_open' --- SMB_OPEN_ANDX
+        - This command opens a existing file or a new file based on the 
+          parameters passed to it. The first argument specifies either create
+          new file or open existing file.
+          The argument can either be
+          a) new - create a new file
+          b) exist - open a existing file
+          c) trunc - truncate an existing file
+
+          The default value for the above are as follows
+          a) new   [openmode = 0x10, desiredaccess = 0x0043, alloc_size=0x00]
+          b) exist [openmode = 0x01, desiredaccess = 0x0002, alloc_size=0x00]
+          c) trunc [openmode = 0x12, desiredaccess = 0x0002, alloc_size=0x00]
+
+          The second parameter is the filename to be created/opened. 
+          Usage: nt_open <exist/new/trunc> <filename>
+
+            nt_open exist file1.txt
+            nt_open new   file1.txt
+            nt_open trunc file1.txt
+
+
+'closefile' --- SMB_CLOSE
+	- This command is used to close an already opened file. The argument 
+          to this function is fd number
+
+          Usage: closefile <fdnum>
+                 closefile $fd0
+
+    NOTE: This command can also accept filename as arguments, however it is 
+          recommended to use fdnum 
+
+
+'nt_read' --- SMB_READ_ANDX
+'read'	  --- SMB_READ
+        - This command is used to read either a range of bytes in the opened 
+          file or the entire file can be read. The command accepts 
+          filename/fdno optionally followed by start offset and the number of 
+          bytes to be read. Passing only the filename will read the file in 
+          entirety. The successive read commands are generated in the client 
+          until eof is found.
+
+          Usage: nt_read <fdnum> [start_offset] [no_of_bytes_to_read]
+                    read <fdnum> [start_offset] [no_of_bytes_to_read]
+
+                 nt_read $fd0 0 12
+                    read $fd0 0 12
+                 (Read 12 bytes from offset 0)
+
+                 nt_read $fd0
+                    read $fd0
+                 (Read the entire file from start offset 0)
+
+    NOTE: This command can also accept filename as arguments, however it is 
+          recommended to use fdnum 
+
+
+'nt_write' --- SMB_WRITE_ANDX
+'write'	   --- SMB_WRITE
+        - This command is used to write bytes in opened file at a specified 
+          offset of at the end of the file. The command accepts start offset 
+          and the write contents filename/fdno followed by start offset and 
+          the number of bytes to be read. Passing only the filename will read 
+          the file in entirety. The successive read commands are generated in 
+          the client until eof is found.
+
+          Usage: nt_write <fdnum> [start_offset] [bytes to write]
+                    write <fdnum> [start_offset] [bytes to write]
+
+                 nt_write $fd0 0 hello world
+                    write $fd0 0 hello world
+                 (writes 12 bytes from offset 0)
+
+                 nt_write $fd1 This appends data at the end of file
+                    write $fd1 This appends data at the end of file
+                 (Writes the bytes at the end of file offset)
+
+    NOTE: This command can also accept filename as arguments, however it is 
+          recommended to use fdnum 
+
+
+'seekfile' --- SMB_SEEK
+        - This command move the current file pointer to the specified location.
+          Number of bytes to move is determined by the current position of file
+          0 - start of file
+          1 - Current position of the file pointer
+          2 - Move backwards from end of file
+
+          Usage: seekfile <fdnum> <current position> <num_of_offset_to_move>
+
+          seekfile $fd0 0 10
+          seekfile $fd0 1 10
+          seekfile $fd0 2 10
+	
+    NOTE: This command can also accept filename as arguments, however it is 
+          recommended to use fdnum 
+
+
+'isdir' --- SMB_CHECK_DIR 
+        - Check the existence of the directory.
+
+          Usage: isdir <directoryname>
+
+                 isdir /dir
+
+
+'openfile' --- SMB_OPEN
+        - Open a file for read and write. The parameters following filename 
+          is defaulted to 128, 135 for desiredaccess and searchattr.
+
+          Usage: openfile <filename> [desiredaccess] [searchattr]
+
+          openfile file1.txt
+          openfile file2.txt 2 128
+
+
+'flush'  --- SMB_FLUSH
+        - Genereates a flush message to write the contents to the disk.
+
+          Usage: flush <fdnum>
+                 flush $fd0
+
+    NOTE: This command can also accept filename as arguments, however it is 
+          recommended to use fdnum 
+
+
+'delete' --- SMB_DELETE
+        - Delete a file
+
+          Usage: delete <fdnum>
+                 delete $fd0
+
+    NOTE: This command can also accept filename as arguments, however it is 
+          recommended to use fdnum 
+
+
+'mkdir' --- SMB_CREATE_DIR
+        - Create a directory for the absolute name provided 
+
+          Usage: mkdir <direcitory name>
+                 mkdir testdir
+
+'rmdir','delete_dir' --- SMB_DELETE_DIR
+        - Delete a directory 
+
+          Usage: rmdir/delete_dir <dirname>
+          rmdir/delete_dir testdir
+
+
+'rename' --- SMB_RENAME
+        - Renames a file with the new name.
+
+          Usage: rename <old filename> <new filename>
+          rename oldfile.txt newfile.txt
+
+
+'findfirst2'  --- TRANS2_FIND_FIRST2
+        - List all the files in the directory. The pathname should be an 
+          absolute path name. followed by the path name is the level of 
+          intereset. The level of interest are as follows:
+          a) bothfileiddirinfo  SMB_FIND_FILE_ID_BOTH_DIRECTORY_INFO
+          b) bothfiledirinfo    SMB_FIND_FILE_BOTH_DIRECTORY_INFO
+          c) filedirinfo        SMB_FIND_FILE_DIRECTORY_INFO
+          d) fulldirinfo        SMB_FIND_FILE_FULL_DIRECTORY_INFO
+          e) filenamesinfo      SMB_FIND_FILE_NAMES_INFO
+          f) fileiddirinfo      SMB_FIND_FILE_ID_FULL_DIRECTORY_INFO
+
+          Usage: findfirst2 <path> [level of interest]
+
+          findfirst2 \abc\* bothfiledirinfo
+          findfirst2 \abc\* filedirinfo
+          findfirst2 \abc\* fulldirinfo
+          findfirst2 \abc\* filenamesinfo
+          findfirst2 \abc\* fileiddirinfo
+          findfirst2 \abc\* bothfileiddirinfo
+
+
+'findclose2' ---  TRANS2_FIND_CLOSE
+        - Close the search id opened using findfirst2 command.
+
+          Usage: findclose2 <path>
+                 findclose2 \abc\*
+
+
+'getfsinfo' --- TRANS2_QUERY_FS_INFORMATION
+        - Get the File system information provided with level of interest.
+          The command works on the mapped drive/volume. Currently only supports
+          this mapped volume. The level of interest are as follows:
+          a) alloc
+          b) vol
+          c) fsvol
+          d) size
+          e) device
+          f) attrinfo
+          g) fullsize
+
+          Usage: getfsinfo [level of intereset]	
+
+          getfsinfo alloc
+          getfsinfo vol
+          getfsinfo fsvol
+          getfsinfo size
+          getfsinfo device
+          getfsinfo attrinfo
+          getfsinfo fullsize
+
+
+'getfileinfo' --- TRANS2_QUERY_FILE_INFORMATION 
+        - Obtain the information of the file. The command accepts the 
+          filename/fdnum and the level of interest.  
+          Following are the level of interest:
+          a) stdinfo        SMB_INFO_STANDARD
+          b) easize         SMB_INFO_QUERY_EA_SIZE
+          c) ealist         SMB_INFO_QUERY_EAS_FROM_LIST
+          d) alleas         SMB_INFO_QUERY_ALL_EAS
+          e) isnamevalid    SMB_INFO_IS_NAME_VALID
+          f) filebasicinfo  SMB_QUERY_FILE_BASIC_INFO
+          g) filestdinfo    SMB_QUERY_FILE_STANDARD_INFO
+          h) fileeainfo     SMB_QUERY_FILE_EA_INFO
+          i) fninfo         SMB_QUERY_FILE_NAME_INFO
+          j) fnallocinfo    SMB_QUERY_FILE_ALLOC_INFO
+          k) fneofinfo      SMB_QUERY_FILE_EOF_INFO
+          l) fnallinfo      SMB_QUERY_FILE_ALL_INFO
+          m) fnaltnameinfo  SMB_QUERY_FILE_ALT_NAME_INFO
+          n) streaminfo     SMB_QUERY_FILE_STREAM_INFO
+          o) compressinfo   SMB_QUERY_FILE_COMPRESSION_INFO
+          p) nwopeninfo     SMB_FILE_NETWORK_OPEN_INFORMATION
+          q) fninternalinfo SMB_QUERY_FILE_INTERNAL_INFO
+
+          Usage: getfileinfo <fdnum> [level of interest]
+
+          getfileinfo $fd0 filebasicinfo
+          getfileinfo $fd0 filestdinfo
+          getfileinfo $fd1 fneofinfo
+          getfileinfo $fd1 fninfo
+          getfileinfo $fd1 fnallinfo
+          getfileinfo $fd1 isnamevalid
+
+    NOTE: This command can also accept filename as arguments, however it is 
+          recommended to use fdnum
+
+
+'getpathinfo' --- TRANS2_QUERY_PATH_INFORMATION
+        - Obtain the information of the file. The command accepts the filename
+          and the level of interest. Following are the level of interest
+          a) stdinfo          SMB_INFO_STANDARD
+          b) easize           SMB_INFO_QUERY_EA_SIZE
+          c) ealist           SMB_INFO_QUERY_EAS_FROM_LIST
+          d) alleas           SMB_INFO_QUERY_ALL_EAS
+          e) isnamevalid      SMB_INFO_IS_NAME_VALID
+          f) filebasicinfo    SMB_QUERY_FILE_BASIC_INFO
+          g) filestdinfo      SMB_QUERY_FILE_STANDARD_INFO
+          h) fileeainfo       SMB_QUERY_FILE_EA_INFO
+          i) fninfo           SMB_QUERY_FILE_NAME_INFO
+          j) fnallocinfo      SMB_QUERY_FILE_ALLOC_INFO
+          k) fneofinfo        SMB_QUERY_FILE_EOF_INFO
+          l) fnallinfo        SMB_QUERY_FILE_ALL_INFO
+          m) fnaltnameinfo    SMB_QUERY_FILE_ALT_NAME_INFO
+          n) streaminfo       SMB_QUERY_FILE_STREAM_INFO
+          o) compressinfo     SMB_QUERY_FILE_COMPRESSION_INFO
+          p) nwopeninfo       SMB_FILE_NETWORK_OPEN_INFORMATION
+          q) fninternalinfo   SMB_QUERY_FILE_INTERNAL_INFO
+
+    Usage: getpathinfo <filename> [level of interest]
+
+          getpathinfo test1.txt stdinfo
+          getpathinfo test1.txt fnallinfo
+          getpathinfo test1.txt fnaltnameinfo
+          getpathinfo test1.txt streaminfo
+          getpathinfo test1.txt compressinfo
+          getpathinfo test1.txt nwopeninfo
+          getpathinfo test1.txt fninternalinfo
+
+
+'setfileinfo' --- TRANS2_SET_FILE_INFORMATION
+        - Update the meta data of the file using this command. The commands 
+          accepts either filename/fdnum along with the level of interest. 
+          Following are the level of interest
+          a) filebasicinfo    SMB_QUERY_FILE_BASIC_INFO
+          b) delete           SMB_SET_FILE_DISPOSITION_INFO
+          c) allocinfo        SMB_SET_FILE_ALLOCATION_INFO
+          d) eofinfo          SMB_SET_FILE_END_OF_FILE_INFO
+
+          Usage: setfileinfo <fdnum> [level_of_interest] [optional args]
+
+          optional arguments are used for setting filebasicinfo, allocinfo, eofinfo 
+          - allocinfo/eofinfo: file size change, 
+          - filebasicinfo    : time of change
+
+          setfileinfo $fd0 delete
+          - The file has to be opened with delete flag set.
+
+    NOTE: This command can also accept filename as arguments, however it is 
+          recommended to use fdnum 
+
+
+'trans2createdir' --- TRANS2_CREATE_DIRECTORY
+        - Create a directory 
+            Usage: trans2createdir [directoyname]
+
+            trans2createdir tempdir
+
+
+'lockandx' --- LOCKING_ANDX
+        - This command is used to lock/unlock a range of bytes in an opened 
+          file. This command can be used to issue lock request for large files 
+          also. The file has to be opened before using this command.  
+          Following subcommands can be used along with this command:
+          a) lock
+          b) unlock
+          c) largefile_lock
+          d) largefile_unlock
+          e) lockcancel
+          f) changelocktype
+          g) sharedlock
+
+          Usage: lockandx <subcommand> <fdnum> 
+                 [list of byte ranges to lock/unlock] 
+                 [list of byte ranges to lock/unlock] 
+          The locks/unlock ranges use the following format. Both lock and 
+          unlock uses the same sequence;  offset num_of_bytes 
+
+          lockandx lock $fd0 0 20 45 50
+          lockandx unlock $fd0 0 20 45 50
+          lockandx largefile_lock $fd0 1000000 2000 
+          lockandx largefile_unlock $fd0 1000000 2000
+
+    NOTE: This command can also accept filename as arguments, however it is 
+          recommended to use fdnum 
+
+
+'waitforoplockbreak' -- OPLOCK_BREAK
+        - This command has to be used only when testing the oplock break 
+          feature from the server. This command has to be in the first client 
+          that opens the file in exclusive oplock mode. Once this command is 
+          executed, further commands subsequent to this is not executed until 
+          a oplock break is not received from the server.  
+
+          While using this command, there has to be 2 clients operating on the 
+          same while with each requesting oplock. The client1 has 
+          waitforoplockbreak and waits till the second client opens the same 
+          file with oplock request and server responding with oplock break to 
+          client1 and then continues with the remaining of the commands in the 
+          testscript
+
+          Usage: waitforoplockbreak
+
+          Example of waitforoplockbreak
+
+          Client1 test script
+          ===================
+          test: client1
+
+          Description: Client1 opening the file with exclusive mode and waiting
+                       for oplock break from server
+
+          negotiate SMB_DIALECT_NTLM12
+          session_setup
+          tree_connect
+
+          nt_create file1.doc oplock=0x12 accessmask=1 fileattr=128 sharemode=3 disposition=1 createoptions=2112
+          lockandx lock $fd0   0 10 7 5
+          lockandx unlock $fd0 0 10 7 5
+          waitforoplockbreak
+
+          closefile $fd0
+          tree_disconnect
+          logoff
+
+          Client2 testscript
+          ==================
+
+          test: client2
+          description: client2 opening the same file as client1 with oplock request and triggering the server to send oplock break to client1
+          negotiate SMB_DIALECT_NTLM12
+          session_setup
+          tree_connect
+
+          nt_create file1.doc oplock=22 accessmask=1 fileattr=128 sharemode=1 disposition=1 createoptions=2112
+          lockandx lock   $fd0   0 10 7 5
+          lockandx unlock $fd0 0 10 7 5
+
+          closefile $fd0
+          tree_disconnect
+          logoff

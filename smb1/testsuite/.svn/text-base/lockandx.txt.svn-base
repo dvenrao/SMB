@@ -1,0 +1,21 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+#ntcreate file1  oplock=0x0 accessmask=7 fileattr= sharemode= disposition= createoptions
+#    impersonation= securityflags=
+nt_create file1 0 7 128 3 1 2112 2 3
+lockandx lock file1 0 10 7 5
+#wait 10
+
+
+#lockandx lock file1 3 5 
+#lockandx lock file1 3 5 
+#lockandx changelocktype file1 
+#lockandx unlock file1 0 10 7 5
+#lockandx lock file1 3000 5000 
+#lockandx unlock file1 3000 5000 
+closefile file1
+tree_disconnect
+logoff

@@ -1,0 +1,14 @@
+test: read_prefetch
+description: This test case is used to check the functionality of read prefetch triggered after 3/4 successive nt_read requests 
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+nt_create corefile.txt oplock=0 accessmask=7 fileattr=128 sharemode=1 disposition=1 createoptions=2112  
+wait 10
+
+nt_read $fd0 220024
+
+closefile $fd0
+wait 10
+tree_disconnect
+logoff

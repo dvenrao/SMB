@@ -1,0 +1,40 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+
+#nt_create test1.txt 0 7 128 3 1 2112 2 3
+nt_create test1.txt oplock=0x0 accessmask=7 fileattr=128 sharemode=3 disposition=3 createoptions=2112
+
+getfileinfo test1.txt stdinfo
+#Malformed packet sent by server
+#getfileinfo test1.txt easize
+
+#Works need to add the file to EA list
+#getfileinfo test1.txt ealist   
+#getfileinfo test1.txt alleas
+
+#Unknown info level reported from server
+#getfileinfo test1.txt isnamevalid
+
+getfileinfo test1.txt filebasicinfo
+getfileinfo test1.txt filestdinfo
+getfileinfo test1.txt fileeainfo
+getfileinfo test1.txt fninfo
+
+#Unknown info level
+#getfileinfo test1.txt fnallocinfo
+#getfileinfo test1.txt fneofinfo
+
+getfileinfo test1.txt fnallinfo
+getfileinfo test1.txt fnaltnameinfo
+getfileinfo test1.txt streaminfo
+getfileinfo test1.txt compressinfo
+getfileinfo test1.txt nwopeninfo
+getfileinfo test1.txt fninternalinfo
+
+closefile test1.txt
+tree_disconnect
+logoff
+

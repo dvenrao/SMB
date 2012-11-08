@@ -1,0 +1,25 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect 
+nt_create corefile.txt oplock=0 accessmask=7 fileattr=128 sharemode=1 disposition=1 createoptions=2112 errclass=0 error=0xC0000043
+wait 10
+
+#Should trigger at 10MB
+read $fd0 10280960 4096
+wait 2
+read $fd0 10297344 10240
+wait 2
+read $fd0 10330022 16384
+wait 2
+read $fd0 10362700 16384
+wait 2
+read $fd0 10392700 16384
+wait 2
+
+
+closefile $fd0
+wait 20
+tree_disconnect
+logoff

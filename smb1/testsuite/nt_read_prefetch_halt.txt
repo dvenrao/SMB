@@ -1,0 +1,27 @@
+test: read_prefetch_stop
+description: Inititates the read prefetch and also stops the read prefetch requests 
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+nt_create read_pf.pcap oplock=0 accessmask=7 fileattr=128 sharemode=1 disposition=1 createoptions=2112  
+nt_read $fd0 1024 5210
+wait 2
+nt_read $fd0 10280960 4096
+wait 5
+nt_read $fd0 10297344 10240
+wait 5
+nt_read $fd0 10330022 16384
+wait 5
+nt_read $fd0 10362700 16384
+wait 2
+nt_read $fd0 20986816 1024
+wait 2
+nt_read $fd0 21986816 1024
+wait 2
+nt_read $fd0 22986816 1024
+wait 2
+nt_read $fd0 22986816 1024
+wait 2
+closefile $fd0
+tree_disconnect
+logoff

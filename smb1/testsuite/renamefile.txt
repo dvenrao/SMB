@@ -1,0 +1,9 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+rename file1.txt newfile.txt
+rename newfile.txt file1.txt
+tree_disconnect
+logoff

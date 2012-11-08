@@ -1,0 +1,9 @@
+test: test1
+description: new test
+negotiate SMB_DIALECT_NTLM12
+session_setup
+tree_connect
+#nt_create file1 oplock=0x0 accessmask=7 fileattr= sharemode= disposition= createoptions
+nt_create cifssmbtestfolder oplock=0 accessmask=1048577 fileattr=128 sharemode=3 disposition=5 createoptions=1 
+tree_disconnect 
+logoff
