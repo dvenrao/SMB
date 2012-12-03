@@ -1,0 +1,38 @@
+--read write chunk size,
+--dfs,signature,extnded security
+--no. chain commands
+--async <flags>
+--dialect
+--max. transac size.
+--max read,write size. <neg>
+--ristrict exclusive open,force share <tree>
+--durable handle reconnect.
+
+
+--log file
+
+
+
+#################################################################3
+
+simple read and write and close ...
+file alredy exits try to create.
+file doesn't exits open file should fail obkject not found.'
+fails exits delete it.
+it should fail object not found.
+2 files rename ........
+
+
+10 --- set info 1MB......512k read...
+
+################################################################
+
+copy read and write...
+set info , ccrete-options....delete-dir
+
+copy delete original....
+oplock--flush,,,all contents
+
+increse file size....
+decrese file size.....
+
